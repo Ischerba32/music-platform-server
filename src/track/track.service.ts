@@ -7,6 +7,9 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { FileService, FileType } from 'src/file/file.service';
 
+import { getAudioDurationInSeconds } from 'get-audio-duration';
+import * as path from 'path';
+
 @Injectable()
 export class TrackService {
   constructor(
@@ -18,11 +21,17 @@ export class TrackService {
   async create(dto: CreateTrackDto, picture, audio): Promise<Track> {
     const audioPath = this.fileService.createFile(FileType.AUDIO, audio);
     const picturePath = this.fileService.createFile(FileType.IMAGE, picture);
+    const duration = Math.ceil(
+      await getAudioDurationInSeconds(
+        path.resolve(__dirname, '..', 'static', audioPath),
+      ),
+    );
     const track = await this.trackModel.create({
       ...dto,
       listens: 0,
       audio: audioPath,
       picture: picturePath,
+      duration,
     });
     return track;
   }

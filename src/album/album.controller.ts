@@ -15,7 +15,7 @@ import { AlbumService } from './album.service';
 import { AddTrackDto } from './dto/add-track.dto';
 import { CreateAlbumDto } from './dto/create-album.dto';
 
-@Controller('/album')
+@Controller('/albums')
 export class AlbumController {
   constructor(private albumService: AlbumService) {}
 
