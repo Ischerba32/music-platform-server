@@ -5,11 +5,13 @@ import { Comment, CommentSchema } from './schemas/comment.schema';
 import { Track, TrackSchema } from './schemas/track.schema';
 import { TrackController } from './track.controller';
 import { TrackService } from './track.service';
+import { User, UserSchema } from 'src/users/schemas/users.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Track.name, schema: TrackSchema }]),
     MongooseModule.forFeature([{ name: Comment.name, schema: CommentSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [TrackController],
   providers: [TrackService, FileService],

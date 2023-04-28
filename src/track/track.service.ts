@@ -9,12 +9,15 @@ import { FileService, FileType } from 'src/file/file.service';
 
 import { getAudioDurationInSeconds } from 'get-audio-duration';
 import * as path from 'path';
+import { AddTrackToUserFavsDto } from './dto/add-track-to-users-favs.dto';
+import { User, UserDocument } from 'src/users/schemas/users.schema';
 
 @Injectable()
 export class TrackService {
   constructor(
     @InjectModel(Track.name) private trackModel: Model<TrackDocument>,
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
     private fileService: FileService,
   ) {}
 
@@ -60,6 +63,14 @@ export class TrackService {
     track.comments.push(comment._id);
     await track.save();
     return comment;
+  }
+
+  async addTrackToUserFavs(dto: AddTrackToUserFavsDto): Promise<Track> {
+    const user = await this.userModel.findById(dto.userId);
+    const track = await this.trackModel.findById(dto.trackId);
+    user.favorites.push(track._id);
+    await user.save();
+    return track;
   }
 
   async listen(id: ObjectId) {
