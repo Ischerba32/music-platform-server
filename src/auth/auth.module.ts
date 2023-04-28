@@ -9,12 +9,15 @@ import { AuthController } from './auth.controller';
 import { User, UserSchema } from '../users/schemas/users.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BcryptService } from './bcrypt.service';
+import { UsersService } from 'src/users/users.service';
+import { BcryptModule } from 'src/bcrypt/bcrypt.module';
 
 @Module({
   imports: [
     ConfigModule,
     UsersModule,
     PassportModule,
+    BcryptModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
@@ -22,9 +25,16 @@ import { BcryptService } from './bcrypt.service';
         signOptions: { expiresIn: '1h' },
       }),
       inject: [ConfigService],
+      imports: [ConfigModule, ConfigService],
     }),
   ],
-  providers: [AuthService, LocalStrategy, BcryptService],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    BcryptService,
+    UsersService,
+    ConfigService,
+  ],
   exports: [AuthService],
   controllers: [AuthController],
 })

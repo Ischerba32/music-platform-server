@@ -8,6 +8,7 @@ import { AlbumModule } from './album/album.module';
 import { PlaylistModule } from './playlist/playlist.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({ rootPath: path.resolve(__dirname, 'static') }),
@@ -20,6 +21,7 @@ import { UsersModule } from './users/users.module';
     FileModule,
     BcryptModule,
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

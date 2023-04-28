@@ -37,11 +37,6 @@ export class UsersService {
   }
 
   async createUser(dto: CreateUserDto): Promise<User> {
-    const existingEmail = await this.usersModel.findOne({ email: dto.email });
-    console.log(existingEmail);
-    if (existingEmail) {
-      throw new HttpException('User with this email is already exist', 400);
-    }
     dto.password = await this.bcryptService.hash(dto.password);
     const user = await this.usersModel.create({
       ...dto,
@@ -50,6 +45,10 @@ export class UsersService {
       role: UserRole.USER,
     });
     return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    return await this.usersModel.findOne({ email: email });
   }
 
   async getOne(id: ObjectId): Promise<User> {
