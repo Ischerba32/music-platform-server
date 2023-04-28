@@ -5,6 +5,7 @@ import { FileModule } from './file/file.module';
 import { TrackModule } from './track/track.module';
 import * as path from 'path';
 import { AlbumModule } from './album/album.module';
+import { PlaylistModule } from './playlist/playlist.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({ rootPath: path.resolve(__dirname, 'static') }),
@@ -13,6 +14,7 @@ import { AlbumModule } from './album/album.module';
     ),
     TrackModule,
     AlbumModule,
+    PlaylistModule,
     FileModule,
   ],
 })

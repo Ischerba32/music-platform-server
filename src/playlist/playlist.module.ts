@@ -1,15 +1,17 @@
-// import {Module} from "@nestjs/common";
-// import {MongooseModule} from "@nestjs/mongoose";
-// import {FileService} from "../file/file.service";
-// import {AlbumController} from "./album.controller";
-// import {Album, AlbumSchema} from "./schemas/album.schema";
-// import {AlbumService} from "./album.service";
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { FileService } from '../file/file.service';
+import { PlaylistController } from './playlist.controller';
+import { Playlist, PlaylistSchema } from './schemas/playlist.schema';
+import { PlaylistService } from './playlist.service';
 
-// @Module({
-//     imports: [
-//         MongooseModule.forFeature([{name: Album.name, schema: AlbumSchema}]),
-//     ],
-//     controllers: [AlbumController],
-//     providers: [AlbumService, FileService]
-// })
-// export class AlbumModule {}
+@Module({
+  imports: [
+    MongooseModule.forFeature([
+      { name: Playlist.name, schema: PlaylistSchema },
+    ]),
+  ],
+  controllers: [PlaylistController],
+  providers: [PlaylistService, FileService],
+})
+export class PlaylistModule {}

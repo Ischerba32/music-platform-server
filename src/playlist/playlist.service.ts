@@ -1,50 +1,58 @@
-// import {Injectable} from "@nestjs/common";
-// import {InjectModel} from "@nestjs/mongoose";
-// import {Model, ObjectId} from "mongoose";
-// import {FileService, FileType} from "src/file/file.service";
-// import { AddTrackDto } from "./dto/add-track.dto";
-// import {CreateAlbumDto} from "./dto/create-album.dto";
-// import {Album, AlbumDocument} from "./schemas/album.schema";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, ObjectId } from 'mongoose';
+import { FileService, FileType } from 'src/file/file.service';
+import { AddTrackDto } from './dto/add-track.dto';
+import { CreatePlaylistDto } from './dto/create-playlist.dto';
+import { Playlist, PlaylistDocument } from './schemas/playlist.schema';
 
-// @Injectable()
-// export class AlbumService {
-//     constructor(@InjectModel(Album.name) private albumModel: Model<AlbumDocument>,
-//                 private fileService: FileService) {}
+@Injectable()
+export class PlaylistService {
+  constructor(
+    @InjectModel(Playlist.name) private playlistModel: Model<PlaylistDocument>,
+    private fileService: FileService,
+  ) {}
 
-//     async create(dto: CreateAlbumDto, picture): Promise<Album> {
-//         const picturePath = this.fileService.createFile(FileType.IMAGE, picture);
-//         const album = await this.albumModel.create({...dto, picture: picturePath});
+  async create(dto: CreatePlaylistDto, picture): Promise<Playlist> {
+    const picturePath = this.fileService.createFile(FileType.IMAGE, picture);
+    const playlist = await this.playlistModel.create({
+      ...dto,
+      picture: picturePath,
+    });
 
-//         return album;
-//     }
+    return playlist;
+  }
 
-//     async addTrackToAlbum(dto: AddTrackDto) {
-//         const album = await this.albumModel.findById(dto.albumId);
-//         console.log(dto);
-//         album.tracks.push(dto.trackId);
-//         await album.save();
-//         return album;
-//     }
+  async addTrackToPlaylist(dto: AddTrackDto) {
+    const playlist = await this.playlistModel.findById(dto.playlistId);
+    console.log(dto);
+    playlist.tracks.push(dto.trackId);
+    await playlist.save();
+    return playlist;
+  }
 
-//     async getAll(count: number, offset: number) {
-//         const albums = await this.albumModel.find().skip(Number(offset)).limit(Number(count));
-//         return albums;
-//     }
+  async getAll(count: number, offset: number) {
+    const playlists = await this.playlistModel
+      .find()
+      .skip(Number(offset))
+      .limit(Number(count));
+    return playlists;
+  }
 
-//     async search(query: string) {
-//         const album = await this.albumModel.find({
-//             name: {$regex: new RegExp(query, 'i')}
-//         })
-//         return album;
-//     }
+  async search(query: string) {
+    const playlist = await this.playlistModel.find({
+      name: { $regex: new RegExp(query, 'i') },
+    });
+    return playlist;
+  }
 
-//     async getOne(id: ObjectId) {
-//         const album = await this.albumModel.findById(id).populate('tracks');
-//         return album;
-//     }
+  async getOne(id: ObjectId) {
+    const playlist = await this.playlistModel.findById(id).populate('tracks');
+    return playlist;
+  }
 
-//     async delete(id: ObjectId): Promise<ObjectId> {
-//         const album = await this.albumModel.findByIdAndDelete(id);
-//         return album._id
-//     }
-// }
+  async delete(id: ObjectId): Promise<ObjectId> {
+    const playlist = await this.playlistModel.findByIdAndDelete(id);
+    return playlist._id;
+  }
+}
