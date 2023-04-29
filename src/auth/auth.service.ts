@@ -6,12 +6,17 @@ import { UsersService } from '../users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { User } from 'src/users/schemas/users.schema';
+import { TokenService } from 'src/token/token.service';
+
+type AuthResponse = User & {
+  token: string;
+};
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
+    private readonly tokenService: TokenService,
     private readonly bcryptService: BcryptService,
   ) {}
 
@@ -32,7 +37,7 @@ export class AuthService {
     return this.usersService.createUser(dto);
   }
 
-  async signIn(dto: SignInDto): Promise<User> {
+  async signIn(dto: SignInDto): Promise<AuthResponse> {
     const existingUser = await this.usersService.getUserByEmail(dto.email);
     if (!existingUser) {
       throw new HttpException('User is not exist', 400);
@@ -43,14 +48,12 @@ export class AuthService {
     );
 
     if (!isValidatedPassword) throw new HttpException('Bad password', 400);
-
-    return existingUser;
-  }
-
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
+    const payload = {
+      username: existingUser.username,
+      id: existingUser._id,
+      role: existingUser.role,
     };
+    const token = await this.tokenService.generateToken(payload);
+    return { ...existingUser, token };
   }
 }
