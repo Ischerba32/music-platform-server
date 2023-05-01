@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { FileService, FileType } from 'src/file/file.service';
+import { FileService, FileType } from '../file/file.service';
 import { AddTrackDto } from './dto/add-track.dto';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { Album, AlbumDocument } from './schemas/album.schema';

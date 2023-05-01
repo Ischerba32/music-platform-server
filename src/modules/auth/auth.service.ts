@@ -1,12 +1,11 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ObjectId } from 'mongoose';
 import { BcryptService } from '../bcrypt/bcrypt.service';
 import { UsersService } from '../users/users.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
-import { User } from 'src/users/schemas/users.schema';
-import { TokenService } from 'src/token/token.service';
+import { User } from '../users/schemas/users.schema';
+import { TokenService } from '../token/token.service';
 
 type AuthResponse = User & {
   token: string;

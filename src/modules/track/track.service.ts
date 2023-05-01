@@ -5,12 +5,12 @@ import { Track, TrackDocument } from './schemas/track.schema';
 import { Model, ObjectId } from 'mongoose';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { FileService, FileType } from 'src/file/file.service';
+import { FileService, FileType } from '../file/file.service';
 
 import { getAudioDurationInSeconds } from 'get-audio-duration';
 import * as path from 'path';
 import { AddTrackToUserFavsDto } from './dto/add-track-to-users-favs.dto';
-import { User, UserDocument } from 'src/users/schemas/users.schema';
+import { User, UserDocument } from '../users/schemas/users.schema';
 
 @Injectable()
 export class TrackService {

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { FileService } from 'src/file/file.service';
+import { FileService } from '../file/file.service';
 import { Comment, CommentSchema } from './schemas/comment.schema';
 import { Track, TrackSchema } from './schemas/track.schema';
 import { TrackController } from './track.controller';
 import { TrackService } from './track.service';
-import { User, UserSchema } from 'src/users/schemas/users.schema';
+import { User, UserSchema } from '../users/schemas/users.schema';
 
 @Module({
   imports: [

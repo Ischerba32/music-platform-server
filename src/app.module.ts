@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { FileModule } from './file/file.module';
-import { TrackModule } from './track/track.module';
+import { FileModule } from './modules/file/file.module';
+import { TrackModule } from './modules/track/track.module';
 import * as path from 'path';
-import { AlbumModule } from './album/album.module';
-import { PlaylistModule } from './playlist/playlist.module';
-import { BcryptModule } from './bcrypt/bcrypt.module';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { TokenModule } from './token/token.module';
+import { AlbumModule } from './modules/album/album.module';
+import { PlaylistModule } from './modules/playlist/playlist.module';
+import { BcryptModule } from './modules/bcrypt/bcrypt.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import config from './config';
 @Module({
@@ -29,7 +28,6 @@ import config from './config';
     BcryptModule,
     UsersModule,
     AuthModule,
-    // TokenModule,
   ],
 })
 export class AppModule {}

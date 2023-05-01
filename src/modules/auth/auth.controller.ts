@@ -1,18 +1,11 @@
-import {
-  Controller,
-  Request,
-  Post,
-  UseGuards,
-  Body,
-  SetMetadata,
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Post, UseGuards, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
-import { JwtAuthGuard } from '../guards/jwt-guard';
+import { JwtAuthGuard } from '../../guards/jwt-guard';
 import { Roles } from 'src/config/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles-guard';
+import { UserRole } from '../users/interfaces/user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +22,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles(UserRole.ADMIN)
   @Post('test')
   async test() {
     return true;
