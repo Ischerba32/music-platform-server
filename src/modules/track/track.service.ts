@@ -73,6 +73,17 @@ export class TrackService {
     return track;
   }
 
+  async removeTrackFromUserFavs(dto: AddTrackToUserFavsDto): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(
+        dto.userId,
+        { $pull: { favorites: dto.trackId } },
+        { new: true },
+      )
+      .populate('favorites')
+      .exec();
+  }
+
   async listen(id: ObjectId) {
     const track = await this.trackModel.findById(id);
     track.listens += 1;

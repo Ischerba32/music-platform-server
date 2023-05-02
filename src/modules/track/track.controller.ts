@@ -19,6 +19,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-guard';
 import { RolesGuard } from 'src/guards/roles-guard';
 import { Roles } from 'src/config/decorators/roles.decorator';
 import { UserRole } from '../users/interfaces/user.interface';
+import { AddTrackToUserFavsDto } from './dto/add-track-to-users-favs.dto';
 
 @Controller('/tracks')
 export class TrackController {
@@ -78,5 +79,19 @@ export class TrackController {
   @Post('/listen/:id')
   listen(@Param('id') id: ObjectId) {
     return this.trackService.listen(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.USER)
+  @Post('/add-to-favs')
+  addTrackToFavs(@Body() dto: AddTrackToUserFavsDto) {
+    return this.trackService.addTrackToUserFavs(dto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.USER)
+  @Post('/remove-from-favs')
+  removeTrackFromFavs(@Body() dto: AddTrackToUserFavsDto) {
+    return this.trackService.removeTrackFromUserFavs(dto);
   }
 }
