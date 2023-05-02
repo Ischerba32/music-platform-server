@@ -1,4 +1,12 @@
-import { Controller, Post, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Body,
+  Get,
+  Headers,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
@@ -25,6 +33,13 @@ export class AuthController {
   @Roles(UserRole.ADMIN)
   @Post('test')
   async test() {
+    return true;
+  }
+
+  @Get('check-auth')
+  async checkAuthorization(@Headers('authorization') headers) {
+    const isAuthorized = await this.authService.isAuthorized(headers);
+    if (!isAuthorized) throw new UnauthorizedException();
     return true;
   }
 }

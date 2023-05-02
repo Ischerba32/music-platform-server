@@ -16,4 +16,10 @@ export class TokenService {
       expiresIn: this.configService.get('EXPIRES_IN'),
     });
   }
+
+  async verifyToken(accessToken) {
+    return this.jwtService.verify(accessToken, {
+      secret: this.configService.get('JWT_SECRET'),
+    });
+  }
 }

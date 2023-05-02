@@ -55,4 +55,19 @@ export class AuthService {
     const token = await this.tokenService.generateToken(payload);
     return { ...existingUser, token };
   }
+
+  async isAuthorized(authHeader: string): Promise<boolean> {
+    if (!authHeader) return false;
+
+    const accessToken = authHeader.split(' ')[1];
+    try {
+      const payload = await this.tokenService.verifyToken(accessToken);
+      if (!payload.user.username || !payload.user.id || !payload.user.role) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }
