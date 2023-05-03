@@ -36,7 +36,7 @@ export class AuthService {
     return this.usersService.createUser(dto);
   }
 
-  async signIn(dto: SignInDto): Promise<AuthResponse> {
+  async signIn(dto: SignInDto, response): Promise<AuthResponse> {
     const existingUser = await this.usersService.getUserByEmail(dto.email);
     if (!existingUser) {
       throw new HttpException('User is not exist', 400);
@@ -53,6 +53,11 @@ export class AuthService {
       role: existingUser.role,
     };
     const token = await this.tokenService.generateToken(payload);
+    response.cookie('token', token, {
+      expires: new Date(new Date().getTime() + 3600 * 1000),
+      sameSite: 'strict',
+      httpOnly: true,
+    });
     return { ...existingUser, token };
   }
 

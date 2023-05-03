@@ -6,6 +6,8 @@ import {
   Get,
   Headers,
   UnauthorizedException,
+  Res,
+  Response,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -25,8 +27,11 @@ export class AuthController {
   }
 
   @Post('signIn')
-  async signIn(@Body() dto: SignInDto) {
-    return this.authService.signIn(dto);
+  async signIn(
+    @Body() dto: SignInDto,
+    @Response({ passthrough: true }) response,
+  ) {
+    return this.authService.signIn(dto, response);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
