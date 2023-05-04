@@ -11,6 +11,10 @@ import { getAudioDurationInSeconds } from 'get-audio-duration';
 import * as path from 'path';
 import { AddTrackToUserFavsDto } from './dto/add-track-to-users-favs.dto';
 import { User, UserDocument } from '../users/schemas/users.schema';
+import {
+  Playlist,
+  PlaylistDocument,
+} from '../playlist/schemas/playlist.schema';
 
 @Injectable()
 export class TrackService {
@@ -18,6 +22,7 @@ export class TrackService {
     @InjectModel(Track.name) private trackModel: Model<TrackDocument>,
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Playlist.name) private playlistModel: Model<PlaylistDocument>,
     private fileService: FileService,
   ) {}
 
@@ -26,7 +31,7 @@ export class TrackService {
     const picturePath = this.fileService.createFile(FileType.IMAGE, picture);
     const duration = Math.ceil(
       await getAudioDurationInSeconds(
-        path.resolve(__dirname, '..', 'static', audioPath),
+        path.resolve(__dirname, '..', '..', 'static', audioPath),
       ),
     );
     const track = await this.trackModel.create({
@@ -95,5 +100,23 @@ export class TrackService {
       name: { $regex: new RegExp(query, 'i') },
     });
     return tracks;
+  }
+
+  async getUnaddedTracks(playlistId: ObjectId): Promise<any> {
+    const playlist = await this.playlistModel
+      .findById(playlistId)
+      .populate('tracks');
+
+    const tracksInPlaylist = playlist.tracks;
+
+    const allTracks = await this.trackModel.find();
+
+    const unaddedTracks = allTracks.filter(
+      (track) =>
+        !tracksInPlaylist.some(
+          (trackInPlaylist) => trackInPlaylist.id === track.id,
+        ),
+    );
+    return unaddedTracks;
   }
 }

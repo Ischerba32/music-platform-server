@@ -9,6 +9,7 @@ import {
   UploadedFiles,
   UseGuards,
   UseInterceptors,
+  Headers,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ObjectId } from 'mongoose';
@@ -19,10 +20,14 @@ import { Roles } from 'src/config/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/guards/jwt-guard';
 import { RolesGuard } from 'src/guards/roles-guard';
 import { UserRole } from '../users/interfaces/user.interface';
+import { UsersService } from '../users/users.service';
 
-@Controller('/playlist')
+@Controller('/playlists')
 export class PlaylistController {
-  constructor(private playlistService: PlaylistService) {}
+  constructor(
+    private playlistService: PlaylistService,
+    private usersService: UsersService,
+  ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
@@ -42,9 +47,22 @@ export class PlaylistController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
+  @Post('/delete-track')
+  removeTrackFromPlaylist(@Body() dto: AddTrackDto) {
+    return this.playlistService.removeTrackFromPlaylist(dto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @Get()
-  getAll(@Query('count') count: number, @Query('offset') offset: number) {
-    return this.playlistService.getAll(count, offset);
+  async getAll(
+    @Query('count') count: number,
+    @Query('offset') offset: number,
+    @Headers('authorization') headers,
+  ) {
+    const accessToken = headers.split(' ')[1];
+    const userId = await this.usersService.getUserIdbyToken(accessToken);
+    return this.playlistService.getAll(count, offset, userId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

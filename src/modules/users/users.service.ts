@@ -5,12 +5,14 @@ import { Model, ObjectId } from 'mongoose';
 import { User, UserDocument } from './schemas/users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { BcryptService } from '../bcrypt/bcrypt.service';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private usersModel: Model<UserDocument>,
     private readonly bcryptService: BcryptService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<User> {
@@ -31,5 +33,10 @@ export class UsersService {
   async getOne(id: ObjectId): Promise<User> {
     const user = await this.usersModel.findById(id);
     return user;
+  }
+
+  async getUserIdbyToken(token: string): Promise<string> {
+    const { user } = await this.tokenService.verifyToken(token);
+    return user.id;
   }
 }

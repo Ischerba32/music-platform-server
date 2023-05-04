@@ -25,7 +25,7 @@ export class AlbumController {
   constructor(private albumService: AlbumService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.ARTIST)
+  @Roles(UserRole.ADMIN, UserRole.ARTIST, UserRole.USER)
   @Post()
   @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
   create(@UploadedFiles() files, @Body() dto: CreateAlbumDto) {
@@ -41,7 +41,7 @@ export class AlbumController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.ARTIST)
+  @Roles(UserRole.ADMIN, UserRole.ARTIST, UserRole.USER)
   @Get()
   getAll(@Query('count') count: number, @Query('offset') offset: number) {
     return this.albumService.getAll(count, offset);
@@ -55,7 +55,7 @@ export class AlbumController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.ARTIST)
+  @Roles(UserRole.ADMIN, UserRole.ARTIST, UserRole.USER)
   @Get(':id')
   getOne(@Param('id') id: ObjectId) {
     return this.albumService.getOne(id);

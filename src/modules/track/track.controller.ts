@@ -94,4 +94,11 @@ export class TrackController {
   removeTrackFromFavs(@Body() dto: AddTrackToUserFavsDto) {
     return this.trackService.removeTrackFromUserFavs(dto);
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @Post(':playlistId')
+  getUnaddedTracks(@Param('playlistId') playlistId: ObjectId) {
+    return this.trackService.getUnaddedTracks(playlistId);
+  }
 }

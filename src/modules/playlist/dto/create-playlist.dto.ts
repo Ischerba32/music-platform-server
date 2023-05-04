@@ -1,4 +1,4 @@
 export class CreatePlaylistDto {
   readonly name: string;
-  readonly artist: string;
+  readonly owner: string;
 }

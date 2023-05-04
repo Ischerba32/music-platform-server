@@ -17,17 +17,19 @@ import config from './config';
       isGlobal: true,
       load: [config],
     }),
-    ServeStaticModule.forRoot({ rootPath: path.resolve(__dirname, 'static') }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, 'static'),
+    }),
     MongooseModule.forRoot(
       'mongodb+srv://root:ztjFpnxHhLScIg2G@cluster0.lueevsb.mongodb.net/?retryWrites=true&w=majority',
     ),
     TrackModule,
     AlbumModule,
     PlaylistModule,
-    FileModule,
     BcryptModule,
     UsersModule,
     AuthModule,
+    FileModule,
   ],
 })
 export class AppModule {}

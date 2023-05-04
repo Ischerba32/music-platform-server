@@ -43,8 +43,8 @@ export class AuthController {
 
   @Get('check-auth')
   async checkAuthorization(@Headers('authorization') headers) {
-    const isAuthorized = await this.authService.isAuthorized(headers);
-    if (!isAuthorized) throw new UnauthorizedException();
-    return true;
+    const payload = await this.authService.isAuthorized(headers);
+    if (!Object.keys(payload).length) throw new UnauthorizedException();
+    return payload.user;
   }
 }

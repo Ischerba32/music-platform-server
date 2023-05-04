@@ -61,18 +61,18 @@ export class AuthService {
     return { ...existingUser, token };
   }
 
-  async isAuthorized(authHeader: string): Promise<boolean> {
+  async isAuthorized(authHeader: string): Promise<any> {
     if (!authHeader) return false;
 
     const accessToken = authHeader.split(' ')[1];
     try {
       const payload = await this.tokenService.verifyToken(accessToken);
       if (!payload.user.username || !payload.user.id || !payload.user.role) {
-        return false;
+        return {};
       }
-      return true;
+      return payload;
     } catch (error) {
-      return false;
+      return {};
     }
   }
 }
