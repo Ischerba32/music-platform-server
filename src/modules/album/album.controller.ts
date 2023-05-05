@@ -34,14 +34,14 @@ export class AlbumController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.ARTIST)
+  @Roles(UserRole.ADMIN, UserRole.ARTIST, UserRole.USER)
   @Post('/track')
   addTrackToAlbum(@Body() dto: AddTrackDto) {
     return this.albumService.addTrackToAlbum(dto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.ARTIST, UserRole.USER)
+  @Roles(UserRole.ADMIN, UserRole.ARTIST)
   @Get()
   getAll(@Query('count') count: number, @Query('offset') offset: number) {
     return this.albumService.getAll(count, offset);

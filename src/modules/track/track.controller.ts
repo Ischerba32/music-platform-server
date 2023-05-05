@@ -40,7 +40,7 @@ export class TrackController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER, UserRole.ARTIST)
+  @Roles(UserRole.ADMIN)
   @Get()
   getAll(@Query('count') count: number, @Query('offset') offset: number) {
     return this.trackService.getAll(count, offset);
