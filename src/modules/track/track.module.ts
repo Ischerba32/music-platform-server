@@ -7,6 +7,10 @@ import { TrackController } from './track.controller';
 import { TrackService } from './track.service';
 import { User, UserSchema } from '../users/schemas/users.schema';
 import { Playlist, PlaylistSchema } from '../playlist/schemas/playlist.schema';
+import {
+  Recommend,
+  RecommendSchema,
+} from '../recommendations/schemas/recommend.schema';
 
 @Module({
   imports: [
@@ -15,6 +19,9 @@ import { Playlist, PlaylistSchema } from '../playlist/schemas/playlist.schema';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([
       { name: Playlist.name, schema: PlaylistSchema },
+    ]),
+    MongooseModule.forFeature([
+      { name: Recommend.name, schema: RecommendSchema },
     ]),
   ],
   controllers: [TrackController],

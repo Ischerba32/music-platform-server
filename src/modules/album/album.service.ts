@@ -35,7 +35,16 @@ export class AlbumService {
     const albums = await this.albumModel
       .find()
       .skip(Number(offset))
-      .limit(Number(count));
+      .limit(Number(count))
+      .populate('artist');
+    return albums;
+  }
+
+  async getAllArtistAlbums(artistId: ObjectId) {
+    const albums = await this.albumModel
+      .find({ artist: artistId })
+      .populate('artist')
+      .populate('tracks');
     return albums;
   }
 
@@ -47,7 +56,16 @@ export class AlbumService {
   }
 
   async getOne(id: ObjectId) {
-    const album = await this.albumModel.findById(id).populate('tracks');
+    const album = await this.albumModel
+      .findById(id)
+      .populate('artist')
+      // .populate('tracks')
+      .populate({
+        path: 'tracks',
+        populate: {
+          path: 'artist',
+        },
+      });
     return album;
   }
 

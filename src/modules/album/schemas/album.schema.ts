@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Track } from '../../track/schemas/track.schema';
+import { User } from 'src/modules/users/schemas/users.schema';
 
 export type AlbumDocument = Album & Document;
 
@@ -10,8 +11,8 @@ export class Album {
   @Prop()
   name: string;
 
-  @Prop()
-  artist: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  artist: User;
 
   @Prop()
   picture: string;

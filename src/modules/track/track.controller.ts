@@ -97,8 +97,8 @@ export class TrackController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
-  @Post(':playlistId')
-  getUnaddedTracks(@Param('playlistId') playlistId: ObjectId) {
-    return this.trackService.getUnaddedTracks(playlistId);
+  @Post(':entityId')
+  getUnaddedTracks(@Param('entityId') entityId: ObjectId, @Body() body) {
+    return this.trackService.getUnaddedTracks(entityId, body.type);
   }
 }

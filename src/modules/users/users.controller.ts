@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ObjectId } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,5 +31,19 @@ export class UsersController {
   @Get(':id')
   getOne(@Param('id') id: ObjectId) {
     return this.usersService.getOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Get()
+  getAll() {
+    return this.usersService.getAll();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Delete(':id')
+  delete(@Param('id') id: ObjectId) {
+    return this.usersService.delete(id);
   }
 }

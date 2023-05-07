@@ -41,10 +41,17 @@ export class AlbumController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.ARTIST)
+  @Roles(UserRole.ADMIN, UserRole.ARTIST, UserRole.USER)
   @Get()
   getAll(@Query('count') count: number, @Query('offset') offset: number) {
     return this.albumService.getAll(count, offset);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.ARTIST)
+  @Get('/all/:artistId')
+  getAllArtistAlbums(@Param('artistId') artistId: ObjectId) {
+    return this.albumService.getAllArtistAlbums(artistId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

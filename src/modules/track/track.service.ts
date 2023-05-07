@@ -15,6 +15,10 @@ import {
   Playlist,
   PlaylistDocument,
 } from '../playlist/schemas/playlist.schema';
+import {
+  Recommend,
+  RecommendDocument,
+} from '../recommendations/schemas/recommend.schema';
 
 @Injectable()
 export class TrackService {
@@ -23,6 +27,8 @@ export class TrackService {
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Playlist.name) private playlistModel: Model<PlaylistDocument>,
+    @InjectModel(Recommend.name)
+    private recommendModel: Model<RecommendDocument>,
     private fileService: FileService,
   ) {}
 
@@ -44,16 +50,20 @@ export class TrackService {
     return track;
   }
 
-  async getAll(count = 10, offset = 0): Promise<Track[]> {
+  async getAll(count = 20, offset = 0): Promise<Track[]> {
     const tracks = await this.trackModel
       .find()
       .skip(Number(offset))
-      .limit(Number(count));
+      .limit(Number(count))
+      .populate('artist');
     return tracks;
   }
 
   async getOne(id: ObjectId): Promise<Track> {
-    const track = await this.trackModel.findById(id).populate('comments');
+    const track = await this.trackModel
+      .findById(id)
+      .populate('comments')
+      .populate('artist');
     return track;
   }
 
@@ -102,12 +112,15 @@ export class TrackService {
     return tracks;
   }
 
-  async getUnaddedTracks(playlistId: ObjectId): Promise<any> {
-    const playlist = await this.playlistModel
-      .findById(playlistId)
-      .populate('tracks');
+  async getUnaddedTracks(entityId: ObjectId, type: string): Promise<any> {
+    let entity;
+    if (type === 'playlist') {
+      entity = await this.playlistModel.findById(entityId).populate('tracks');
+    } else {
+      entity = await this.recommendModel.findById(entityId).populate('tracks');
+    }
 
-    const tracksInPlaylist = playlist.tracks;
+    const tracksInPlaylist = entity.tracks;
 
     const allTracks = await this.trackModel.find();
 

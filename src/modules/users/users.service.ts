@@ -39,4 +39,14 @@ export class UsersService {
     const { user } = await this.tokenService.verifyToken(token);
     return user.id;
   }
+
+  async getAll(): Promise<User[]> {
+    const users = await this.usersModel.find();
+    return users;
+  }
+
+  async delete(id: ObjectId): Promise<ObjectId> {
+    const user = await this.usersModel.findByIdAndDelete(id);
+    return user._id;
+  }
 }
