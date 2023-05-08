@@ -66,8 +66,14 @@ export class PlaylistService {
   async getOne(id: ObjectId) {
     const playlist = await this.playlistModel
       .findById(id)
-      .populate('tracks')
-      .populate('owner');
+      .populate('owner')
+      // .populate('tracks')
+      .populate({
+        path: 'tracks',
+        populate: {
+          path: 'artist',
+        },
+      });
     // .exec();
     return playlist;
   }

@@ -34,17 +34,10 @@ export class AuthController {
     return this.authService.signIn(dto, response);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Post('test')
-  async test() {
-    return true;
-  }
-
   @Get('check-auth')
   async checkAuthorization(@Headers('authorization') headers) {
     const payload = await this.authService.isAuthorized(headers);
     if (!Object.keys(payload).length) throw new UnauthorizedException();
-    return payload.user;
+    return payload;
   }
 }

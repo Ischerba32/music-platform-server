@@ -115,14 +115,24 @@ export class TrackService {
   async getUnaddedTracks(entityId: ObjectId, type: string): Promise<any> {
     let entity;
     if (type === 'playlist') {
-      entity = await this.playlistModel.findById(entityId).populate('tracks');
+      entity = await this.playlistModel.findById(entityId).populate({
+        path: 'tracks',
+        populate: {
+          path: 'artist',
+        },
+      });
     } else {
-      entity = await this.recommendModel.findById(entityId).populate('tracks');
+      entity = await this.recommendModel.findById(entityId).populate({
+        path: 'tracks',
+        populate: {
+          path: 'artist',
+        },
+      });
     }
 
     const tracksInPlaylist = entity.tracks;
 
-    const allTracks = await this.trackModel.find();
+    const allTracks = await this.trackModel.find().populate('artist');
 
     const unaddedTracks = allTracks.filter(
       (track) =>

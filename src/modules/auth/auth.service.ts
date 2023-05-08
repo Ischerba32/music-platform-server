@@ -28,7 +28,7 @@ export class AuthService {
     return null;
   }
 
-  async signUp(dto: CreateUserDto): Promise<CreateUserDto> {
+  async signUp(dto: CreateUserDto): Promise<User> {
     const existingUser = await this.usersService.getUserByEmail(dto.email);
     if (existingUser) {
       throw new HttpException('User with this email is already exist', 400);
@@ -70,7 +70,9 @@ export class AuthService {
       if (!payload.user.username || !payload.user.id || !payload.user.role) {
         return {};
       }
-      return payload;
+      const userFavs = (await this.usersService.getOne(payload.user.id))
+        .favorites;
+      return { ...payload, favorites: userFavs };
     } catch (error) {
       return {};
     }

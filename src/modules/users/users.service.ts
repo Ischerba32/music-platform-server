@@ -21,17 +21,19 @@ export class UsersService {
       ...dto,
       playlists: [],
       favorites: [],
-      role: UserRole.USER,
+      role: dto.isArtist ? UserRole.ARTIST : UserRole.USER,
     });
     return user;
   }
 
   async getUserByEmail(email: string): Promise<UserDocument | null> {
-    return await this.usersModel.findOne({ email: email });
+    return await this.usersModel
+      .findOne({ email: email })
+      .populate('favorites');
   }
 
   async getOne(id: ObjectId): Promise<User> {
-    const user = await this.usersModel.findById(id);
+    const user = (await this.usersModel.findById(id)).populate('favorites');
     return user;
   }
 
