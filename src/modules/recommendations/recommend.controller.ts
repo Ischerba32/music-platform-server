@@ -36,7 +36,7 @@ export class RecommendController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Post('/track')
-  addTrackToPlaylist(@Body() dto: AddTrackDto) {
+  addTrackToRecommend(@Body() dto: AddTrackDto) {
     return this.recommendService.addTrackToRecommend(dto);
   }
 
@@ -48,7 +48,7 @@ export class RecommendController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @Get()
   async getAll(@Query('count') count: number, @Query('offset') offset: number) {
     return this.recommendService.getAll(count, offset);
@@ -62,7 +62,7 @@ export class RecommendController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @Get(':id')
   getOne(@Param('id') id: ObjectId) {
     return this.recommendService.getOne(id);

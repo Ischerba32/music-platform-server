@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import Sha256 from './sha256';
 
 @Injectable()
 export class TokenService {
@@ -21,5 +22,9 @@ export class TokenService {
     return this.jwtService.verify(accessToken, {
       secret: this.configService.get('JWT_SECRET'),
     });
+  }
+
+  hash(string) {
+    return Sha256.hash(string);
   }
 }
